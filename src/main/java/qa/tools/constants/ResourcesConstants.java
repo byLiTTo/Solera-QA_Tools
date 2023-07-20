@@ -1,7 +1,5 @@
 package qa.tools.constants;
 
-import java.awt.Color;
-
 public class ResourcesConstants {
 
     // ICONS
@@ -10,7 +8,7 @@ public class ResourcesConstants {
     public static final String PASS_ICON = "src/main/resources/icons/cerrar-con-llave (Personalizado).png";
 
     // BACKGROUNDS
-    public static final String MAIN_MENU_BACKGROUND = "src/main/resources/backgrounds/background-white-logo (Small).jpg";
+    public static final String LOGIN_BACKGROUND = "src/main/resources/backgrounds/background-white-logo (Small).jpg";
 
 
 }
