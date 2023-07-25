@@ -11,6 +11,7 @@ import qa.tools.constants.ColorPalette;
 
 public class JRoundedButton extends JButton {
 
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     private int arcWidth = 20; // Ancho de la esquina redondeada
     private int arcHeight = 20; // Alto de la esquina redondeada
 
@@ -21,6 +22,7 @@ public class JRoundedButton extends JButton {
         setBorderPainted(false);
     }
 
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
@@ -28,7 +30,7 @@ public class JRoundedButton extends JButton {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
-                0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight);
+                0, 0, getWidth() - 1d, getHeight() - 1d, arcWidth, arcHeight);
 
         GradientPaint gradient = new GradientPaint(
                 0, 0,
@@ -49,9 +51,9 @@ public class JRoundedButton extends JButton {
         g2d.dispose();
     }
 
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     @Override
     protected void paintBorder(Graphics g) {
-//        super.paintComponent(g);
 
         // Convertir el objeto Graphics en Graphics2D
         Graphics2D g2d = (Graphics2D) g;
@@ -61,7 +63,7 @@ public class JRoundedButton extends JButton {
 
         // Crear un objeto RoundRectangle2D para representar el borde redondeado
         RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
-                0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight);
+                0, 0, getWidth() - 1d, getHeight() - 1d, arcWidth, arcHeight);
 
         // Dibujar el borde redondeado en el panel
         g2d.setColor(Color.BLACK);

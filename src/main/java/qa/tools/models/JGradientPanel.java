@@ -9,6 +9,7 @@ import qa.tools.constants.ColorPalette;
 
 public class JGradientPanel extends JPanel {
 
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

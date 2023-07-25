@@ -1,18 +1,30 @@
 package qa.tools.windows;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import qa.tools.constants.ResourcesConstants;
 import qa.tools.models.JRoundedButton;
 import qa.tools.models.JRoundedPanel;
 import qa.tools.utils.PomReader;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 public class LoginWindow extends JFrame {
+
+    private static final int TITLE_BAR_WIDTH = 16;
+    private static final int TITLE_BAR_HEIGHT = 39;
     private ImageIcon imagenFondo;
     private JLabel labelFondo;
     private JLabel userIcon;
@@ -98,7 +110,6 @@ public class LoginWindow extends JFrame {
 
         // Version region    --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         versionTextField = new JLabel(PomReader.readSnapshotVersion());
-        versionTextField.setSize(200, 44);
         versionTextField.setBounds(10, imagenFondo.getIconHeight() - 40, 200, 44);
 
         // Layered panel --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
@@ -111,28 +122,32 @@ public class LoginWindow extends JFrame {
 
         // Adding content to JFrame  --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         setContentPane(layeredPane);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBackground(Color.RED);
         setResizable(false);
         setIconImage(new ImageIcon(ResourcesConstants.APP_ICON).getImage());
-        setSize((labelFondo.getWidth()), (labelFondo.getHeight() + 28));
+        setSize((labelFondo.getWidth() + TITLE_BAR_WIDTH), (labelFondo.getHeight() + TITLE_BAR_HEIGHT));
         setLocationRelativeTo(null);
         setTitle("QapterClaims FR - QA tools");
 
         loginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                setCursor(Cursor.HAND_CURSOR);
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                setCursor(Cursor.DEFAULT_CURSOR);
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                openMenuWindow();
+                if (userTextField.getText().isEmpty() || passTextField.getText().isEmpty()) {
+                    openLoginWindow();
+                } else {
+                    openMenuWindow();
+                }
             }
         });
 
@@ -149,7 +164,11 @@ public class LoginWindow extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    openMenuWindow();
+                    if (userTextField.getText().isEmpty() || passTextField.getText().isEmpty()) {
+                        openLoginWindow();
+                    } else {
+                        openMenuWindow();
+                    }
                 }
             }
         });
@@ -160,10 +179,16 @@ public class LoginWindow extends JFrame {
     }
 
     private void openMenuWindow() {
-        MenuWindow menuWindow = new MenuWindow();
+        MenuWindow menuWindow = new MenuWindow(userTextField.getText(), passTextField.getText());
         menuWindow.setLocationRelativeTo(this);
         menuWindow.setVisible(true);
         setVisible(false);
     }
 
+    private void openLoginWindow() {
+        LoginWindow loginWindow = new LoginWindow();
+        loginWindow.setLocationRelativeTo(this);
+        loginWindow.setVisible(true);
+        setVisible(false);
+    }
 }

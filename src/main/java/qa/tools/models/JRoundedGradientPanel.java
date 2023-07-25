@@ -10,10 +10,12 @@ import javax.swing.JPanel;
 import qa.tools.constants.ColorPalette;
 
 public class JRoundedGradientPanel extends JPanel {
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
 
     private int arcWidth = 20; // Ancho de la esquina redondeada
     private int arcHeight = 20; // Alto de la esquina redondeada
 
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -26,7 +28,7 @@ public class JRoundedGradientPanel extends JPanel {
 
         // Crear un objeto RoundRectangle2D para representar el borde redondeado
         RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
-                0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight);
+                0, 0, getWidth() - 1d, getHeight() - 1d, arcWidth, arcHeight);
 
         // Dibujar el borde redondeado en el panel
         g2d.setColor(Color.BLACK);

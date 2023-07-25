@@ -1,17 +1,10 @@
 package qa.tools;
 
+import javax.swing.SwingUtilities;
 import qa.tools.windows.LoginWindow;
-
-import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-//        LoginWindow.runApplication();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new LoginWindow().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new LoginWindow().setVisible(true));
     }
 }

@@ -9,8 +9,10 @@ import javax.swing.JPanel;
 
 public class JBackgroundPanel extends JPanel {
 
-    private Image backgroundImage;
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+    private transient Image backgroundImage;
 
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public JBackgroundPanel(String path) {
         try {
             backgroundImage = ImageIO.read(new File(path));
@@ -19,6 +21,7 @@ public class JBackgroundPanel extends JPanel {
         }
     }
 
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

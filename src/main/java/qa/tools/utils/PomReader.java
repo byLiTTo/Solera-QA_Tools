@@ -8,6 +8,10 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 
 public class PomReader {
 
+    private PomReader() {
+        throw new IllegalStateException("PomReader class");
+    }
+
     public static String readSnapshotVersion() {
         File pomFile = new File("pom.xml"); // Ruta del archivo pom.xml
         MavenXpp3Reader reader = new MavenXpp3Reader();
