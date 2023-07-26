@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2023. Carlos.GarciaSilva@solera.com
+ * All rights reserved to QapterClaims FR team
+ */
+
 package qa.tools.utils;
 
 import static org.apache.poi.common.usermodel.Hyperlink.LINK_URL;

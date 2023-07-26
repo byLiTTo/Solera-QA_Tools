@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2023. Carlos.GarciaSilva@solera.com
+ * All rights reserved to QapterClaims FR team
+ */
+
 package qa.tools.models;
 
 import java.awt.Color;
