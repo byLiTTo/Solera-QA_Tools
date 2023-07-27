@@ -9,13 +9,13 @@ public class TestRailCase {
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     private String assigned;
-    private String failRatio;
-    private String titleHyperlinkAddress;
-    private String titleHyperlinkLabel;
-    private String caseHyperlinkAddress;
-    private String caseHyperlinkLabel;
-    private String testRailStatus;
-    private String section;
+    private final String failRatio;
+    private final String titleHyperlinkAddress;
+    private final String titleHyperlinkLabel;
+    private final String caseHyperlinkAddress;
+    private final String caseHyperlinkLabel;
+    private final String testRailStatus;
+    private final String section;
     private String description;
     private String solution;
     private String solHyperlinkAddress;
@@ -23,31 +23,14 @@ public class TestRailCase {
     private String status;
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public TestRailCase(String titleHyperlinkAddress, String titleHyperlinkLabel, String caseHyperlinkAddress,
-            String caseHyperlinkLabel, String testRailStatus, String section) {
-        this.assigned = "";
-        this.failRatio = "";
-        this.titleHyperlinkAddress = titleHyperlinkAddress;
-        this.titleHyperlinkLabel = titleHyperlinkLabel;
-        this.caseHyperlinkAddress = caseHyperlinkAddress;
-        this.caseHyperlinkLabel = caseHyperlinkLabel;
-        this.testRailStatus = testRailStatus;
-        this.section = section;
-        this.description = "";
-        this.solution = "";
-        this.solHyperlinkAddress = "";
-        this.status = "-";
-    }
-
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public TestRailCase(String failRatio, String titleHyperlinkAddress, String titleHyperlinkLabel,
-            String caseHyperlinkAddress, String caseHyperlinkLabel, String testRailStatus, String section) {
+    public TestRailCase(String failRatio, String[] titleHyperlink, String[] caseHyperlink, String testRailStatus,
+            String section) {
         this.assigned = "";
         this.failRatio = failRatio;
-        this.titleHyperlinkAddress = titleHyperlinkAddress;
-        this.titleHyperlinkLabel = titleHyperlinkLabel;
-        this.caseHyperlinkAddress = caseHyperlinkAddress;
-        this.caseHyperlinkLabel = caseHyperlinkLabel;
+        this.titleHyperlinkAddress = titleHyperlink[0];
+        this.titleHyperlinkLabel = titleHyperlink[1];
+        this.caseHyperlinkAddress = caseHyperlink[0];
+        this.caseHyperlinkLabel = caseHyperlink[1];
         this.testRailStatus = testRailStatus;
         this.section = section;
         this.description = "";
@@ -57,21 +40,21 @@ public class TestRailCase {
     }
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public TestRailCase(String assigned, String failRatio, String titleHyperlinkAddress, String titleHyperlinkLabel,
-            String caseHyperlinkAddress, String caseHyperlinkLabel, String testRailStatus, String section,
-            String description, String solution, String solHyperlinkAddress, String solHyperlinkLabel, String status) {
+    public TestRailCase(String assigned, String failRatio, String[] titleHyperlink, String[] caseHyperlink,
+            String testRailStatus, String section, String description, String solution, String[] solHyperlink,
+            String status) {
         this.assigned = assigned;
         this.failRatio = failRatio;
-        this.titleHyperlinkAddress = titleHyperlinkAddress;
-        this.titleHyperlinkLabel = titleHyperlinkLabel;
-        this.caseHyperlinkAddress = caseHyperlinkAddress;
-        this.caseHyperlinkLabel = caseHyperlinkLabel;
+        this.titleHyperlinkAddress = titleHyperlink[0];
+        this.titleHyperlinkLabel = titleHyperlink[1];
+        this.caseHyperlinkAddress = caseHyperlink[0];
+        this.caseHyperlinkLabel = caseHyperlink[1];
         this.testRailStatus = testRailStatus;
         this.section = section;
         this.description = description;
         this.solution = solution;
-        this.solHyperlinkAddress = solHyperlinkAddress;
-        this.solHyperlinkLabel = solHyperlinkLabel;
+        this.solHyperlinkAddress = solHyperlink[0];
+        this.solHyperlinkLabel = solHyperlink[1];
         this.status = status;
     }
 
@@ -88,57 +71,36 @@ public class TestRailCase {
         return failRatio;
     }
 
-    public void setFailRatio(String failRatio) {
-        this.failRatio = failRatio;
-    }
 
     public String getTitleHyperlinkAddress() {
         return titleHyperlinkAddress;
     }
 
-    public void setTitleHyperlinkAddress(String titleHyperlinkAddress) {
-        this.titleHyperlinkAddress = titleHyperlinkAddress;
-    }
 
     public String getTitleHyperlinkLabel() {
         return titleHyperlinkLabel;
     }
 
-    public void setTitleHyperlinkLabel(String titleHyperlinkLabel) {
-        this.titleHyperlinkLabel = titleHyperlinkLabel;
-    }
 
     public String getCaseHyperlinkAddress() {
         return caseHyperlinkAddress;
     }
 
-    public void setCaseHyperlinkAddress(String caseHyperlinkAddress) {
-        this.caseHyperlinkAddress = caseHyperlinkAddress;
-    }
 
     public String getCaseHyperlinkLabel() {
         return caseHyperlinkLabel;
     }
 
-    public void setCaseHyperlinkLabel(String caseHyperlinkLabel) {
-        this.caseHyperlinkLabel = caseHyperlinkLabel;
-    }
 
     public String getTestRailStatus() {
         return testRailStatus;
     }
 
-    public void setTestRailStatus(String testRailStatus) {
-        this.testRailStatus = testRailStatus;
-    }
 
     public String getSection() {
         return section;
     }
 
-    public void setSection(String section) {
-        this.section = section;
-    }
 
     public String getDescription() {
         return description;

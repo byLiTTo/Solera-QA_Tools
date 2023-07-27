@@ -8,14 +8,7 @@ package qa.tools.constants;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 public class ExcelConstants {
-
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public static final String TESTRAIL_LINK = "https://axn-testrail01-p.axadmin.net/index.php?/runs/overview/128";
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public static final int CTFR = 1;
-    public static final int INT1FR = 2;
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public static final String[] STATUS = new String[]{
+    protected static final String[] STATUS = new String[]{
             "-",
             "DEVELOPING",
             "NODE_ERROR",
@@ -27,8 +20,7 @@ public class ExcelConstants {
             "WAITING_NEXT_EXECUTION",
             "PERFORMANCE_ISSUE"
     };
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public static final IndexedColors[] COLORS = {
+    protected static final IndexedColors[] COLORS = {
             IndexedColors.LIGHT_GREEN,
             IndexedColors.LIGHT_TURQUOISE,
             IndexedColors.LIGHT_YELLOW,
@@ -37,7 +29,14 @@ public class ExcelConstants {
             IndexedColors.LIGHT_CORNFLOWER_BLUE
     };
 
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+    public static String[] getStatus() {
+        return STATUS;
+    }
+
+    public static IndexedColors[] getColors() {
+        return COLORS;
+    }
+
     public enum ExcelFields {
         ASSIGNED_TO,
         FAIL_PASS_POST,

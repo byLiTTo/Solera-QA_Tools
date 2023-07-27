@@ -23,8 +23,10 @@ public class TestRailPlansPage {
     private static final Logger logger = Logger.getLogger(TestRailPlansPage.class.getName());
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    private static final String LAST_AUTO_REGRESSION_XPATH = "//div[@class='detailsContainer'][last()]//a[contains(text(),'QapterClaims FR')]";
-    private static final String CUSTOM_AUTO_REGRESSION_XPATH_FORMAT = "//div[@class='detailsContainer']//a[contains(text(),'%s')]";
+    private static final String LAST_AUTO_REGRESSION_XPATH =
+            "//div[@class='detailsContainer'][last()]" + "//a[contains(text(),'QapterClaims FR')]";
+    private static final String CUSTOM_AUTO_REGRESSION_XPATH_FORMAT =
+            "//div[@class='detailsContainer']" + "//a[contains(text(),'%s')]";
     private static final String GRID_CHART_ID = "grid-chart-14959939";
     private static final String TESTCASES_TYPE_XPATH_FORMAT = "//td[@class='js-status']//a[text()='%s']/../..";
     private static final String TABLE_TITLES_XPATH = "//*[@id=\"grid-14959939\"]/tbody/tr//a";
@@ -42,8 +44,8 @@ public class TestRailPlansPage {
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
 
-    private WebDriver webDriver;
-    private WebDriverWait wait;
+    private final WebDriver webDriver;
+    private final WebDriverWait wait;
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public TestRailPlansPage(WebDriver webDriver) {
@@ -149,8 +151,13 @@ public class TestRailPlansPage {
 
             String failRatio = loadRecentlyHistory(element);
 
-            temp.add(new TestRailCase(failRatio, titleHyperlinkAddress, titleHyperlinkLabel, caseHyperlinkAddress,
-                    caseHyperlinkLabel, testStatus, section));
+            temp.add(new TestRailCase(
+                    failRatio,
+                    new String[]{titleHyperlinkAddress, titleHyperlinkLabel},
+                    new String[]{caseHyperlinkAddress, caseHyperlinkLabel},
+                    testStatus,
+                    section
+            ));
         }
         return temp;
     }

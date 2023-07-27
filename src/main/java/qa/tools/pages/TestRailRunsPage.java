@@ -19,13 +19,14 @@ public class TestRailRunsPage {
     private static final String PASS_TEXT_FIELD_ID = "password";
     private static final String LOGIN_BUTTON_ID = "button_primary";
     private static final String HEADER_ID = "content-header";
-    private static final String AUTO_REGRESSION_XPATH_FORMAT = "//div[@class='table']//div[@class='summary-title text-ppp']/a[text()='%s']";
+    private static final String AUTO_REGRESSION_XPATH_FORMAT =
+            "//div[@class='table']" + "//div[@class='summary-title text-ppp']/a[text()='%s']";
     private static final String AUTO_REGRESSION_CONTENT_ID = "content-inner";
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
 
-    private WebDriver webDriver;
-    private WebDriverWait wait;
+    private final WebDriver webDriver;
+    private final WebDriverWait wait;
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
 

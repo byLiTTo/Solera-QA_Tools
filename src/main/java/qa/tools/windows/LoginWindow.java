@@ -12,6 +12,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.text.BadLocationException;
 import qa.tools.constants.ResourcesConstants;
 import qa.tools.models.JRoundedButton;
 import qa.tools.models.JRoundedPanel;
@@ -28,37 +31,28 @@ import qa.tools.utils.PomReader;
 
 public class LoginWindow extends JFrame {
 
+    private static final Logger logger = Logger.getLogger(LoginWindow.class.getName());
+
     private static final int TITLE_BAR_WIDTH = 16;
     private static final int TITLE_BAR_HEIGHT = 39;
-    private ImageIcon imagenFondo;
-    private JLabel labelFondo;
-    private JLabel userIcon;
-    private JRoundedPanel userIconPanel;
-    private JTextField userTextField;
-    private JRoundedPanel userRegion;
-    private JLabel passIcon;
-    private JRoundedPanel passIconPanel;
-    private JPasswordField passTextField;
-    private JRoundedPanel passRegion;
-    private JRoundedButton loginButton;
-    private JPanel loginRegion;
-    private JLabel versionTextField;
-    private JLayeredPane layeredPane;
+    private static final String BAD_LOCATION_EXCEPTION = "BadLocationException: ";
+    private final JTextField userTextField;
+    private final JPasswordField passTextField;
 
     public LoginWindow() {
 
         // Background panel  --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-        imagenFondo = new ImageIcon(ResourcesConstants.LOGIN_BACKGROUND);
-        labelFondo = new JLabel(imagenFondo);
+        ImageIcon imagenFondo = new ImageIcon(ResourcesConstants.LOGIN_BACKGROUND);
+        JLabel labelFondo = new JLabel(imagenFondo);
         labelFondo.setSize(imagenFondo.getIconWidth(), imagenFondo.getIconHeight());
         labelFondo.setVerticalAlignment(SwingConstants.CENTER);
         labelFondo.setHorizontalAlignment(SwingConstants.CENTER);
 
         // User region   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-        userIcon = new JLabel();
+        JLabel userIcon = new JLabel();
         userIcon.setIcon(new ImageIcon(ResourcesConstants.USER_ICON));
 
-        userIconPanel = new JRoundedPanel();
+        JRoundedPanel userIconPanel = new JRoundedPanel();
         userIconPanel.setSize(44, 44);
         userIconPanel.add(userIcon, BorderLayout.CENTER);
         userIconPanel.setOpaque(false);
@@ -68,7 +62,7 @@ public class LoginWindow extends JFrame {
         userTextField.setBorder(null);
         userTextField.setOpaque(false);
 
-        userRegion = new JRoundedPanel();
+        JRoundedPanel userRegion = new JRoundedPanel();
         userRegion.setLayout(null);
         userRegion.setOpaque(false);
         userRegion.setBackground(Color.red);
@@ -78,10 +72,10 @@ public class LoginWindow extends JFrame {
         userRegion.add(userTextField);
 
         // Password region   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-        passIcon = new JLabel();
+        JLabel passIcon = new JLabel();
         passIcon.setIcon(new ImageIcon(ResourcesConstants.PASS_ICON));
 
-        passIconPanel = new JRoundedPanel();
+        JRoundedPanel passIconPanel = new JRoundedPanel();
         passIconPanel.setSize(44, 44);
         passIconPanel.add(passIcon, BorderLayout.CENTER);
         passIconPanel.setOpaque(false);
@@ -91,7 +85,7 @@ public class LoginWindow extends JFrame {
         passTextField.setBorder(null);
         passTextField.setOpaque(false);
 
-        passRegion = new JRoundedPanel();
+        JRoundedPanel passRegion = new JRoundedPanel();
         passRegion.setLayout(null);
         passRegion.setOpaque(false);
         passRegion.setBackground(Color.red);
@@ -101,12 +95,12 @@ public class LoginWindow extends JFrame {
         passRegion.add(passTextField);
 
         // Login button  --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-        loginButton = new JRoundedButton("LOGIN");
+        JRoundedButton loginButton = new JRoundedButton("LOGIN");
         loginButton.setBounds(60, 0, 200, 44);
         loginButton.setBorder(null);
         loginButton.setOpaque(false);
 
-        loginRegion = new JPanel();
+        JPanel loginRegion = new JPanel();
         loginRegion.setOpaque(false);
         loginRegion.setBackground(Color.red);
         loginRegion.setBounds(275, 410, 305, 44);
@@ -114,11 +108,11 @@ public class LoginWindow extends JFrame {
         loginRegion.add(loginButton);
 
         // Version region    --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-        versionTextField = new JLabel(PomReader.readSnapshotVersion());
+        JLabel versionTextField = new JLabel(PomReader.readSnapshotVersion());
         versionTextField.setBounds(10, imagenFondo.getIconHeight() - 40, 200, 44);
 
         // Layered panel --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-        layeredPane = new JLayeredPane();
+        JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.add(labelFondo, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(userRegion, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(passRegion, JLayeredPane.PALETTE_LAYER);
@@ -148,19 +142,15 @@ public class LoginWindow extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (userTextField.getText().isEmpty() || passTextField.getText().isEmpty()) {
-                    openLoginWindow();
-                } else {
-                    openMenuWindow();
-                }
-            }
-        });
-
-        userTextField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    passTextField.requestFocus();
+                try {
+                    if (!userTextField.getDocument().getText(0, userTextField.getDocument().getLength())
+                            .isEmpty() && !passTextField.getDocument()
+                            .getText(0, passTextField.getDocument().getLength()).isEmpty()) {
+                        openMenuWindow(userTextField.getDocument().getText(0, userTextField.getDocument().getLength()),
+                                passTextField.getDocument().getText(0, passTextField.getDocument().getLength()));
+                    }
+                } catch (BadLocationException ex) {
+                    logger.log(Level.WARNING, BAD_LOCATION_EXCEPTION, ex);
                 }
             }
         });
@@ -169,31 +159,26 @@ public class LoginWindow extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if (userTextField.getText().isEmpty() || passTextField.getText().isEmpty()) {
-                        openLoginWindow();
-                    } else {
-                        openMenuWindow();
+                    try {
+                        if (!userTextField.getDocument().getText(0, userTextField.getDocument().getLength()).isEmpty()
+                                && !passTextField.getDocument().getText(0, passTextField.getDocument().getLength())
+                                .isEmpty()) {
+                            openMenuWindow(
+                                    userTextField.getDocument().getText(0, userTextField.getDocument().getLength()),
+                                    passTextField.getDocument().getText(0, passTextField.getDocument().getLength()));
+                        }
+                    } catch (BadLocationException ex) {
+                        logger.log(Level.WARNING, BAD_LOCATION_EXCEPTION, ex);
                     }
                 }
             }
         });
     }
 
-    public static void runApplication() {
-        new LoginWindow();
-    }
-
-    private void openMenuWindow() {
-        MenuWindow menuWindow = new MenuWindow(userTextField.getText(), passTextField.getText());
+    private void openMenuWindow(String user, String pass) {
+        MenuWindow menuWindow = new MenuWindow(user, pass);
         menuWindow.setLocationRelativeTo(this);
         menuWindow.setVisible(true);
-        setVisible(false);
-    }
-
-    private void openLoginWindow() {
-        LoginWindow loginWindow = new LoginWindow();
-        loginWindow.setLocationRelativeTo(this);
-        loginWindow.setVisible(true);
         setVisible(false);
     }
 }

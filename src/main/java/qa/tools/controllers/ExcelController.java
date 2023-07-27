@@ -28,9 +28,9 @@ public class ExcelController {
 
     private String userName = "?";
     private String pass = "?";
-    private WebDriver webdriver;
-    private TestRailRunsPage testRailRunsPage;
-    private TestRailPlansPage testRailPlansPage;
+    private final WebDriver webdriver;
+    private final TestRailRunsPage testRailRunsPage;
+    private final TestRailPlansPage testRailPlansPage;
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public ExcelController() {
@@ -39,18 +39,11 @@ public class ExcelController {
         testRailPlansPage = new TestRailPlansPage(getWebdriver());
     }
 
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public String getUserName() {
-        return userName;
-    }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public String getPass() {
-        return pass;
-    }
 
     public void setPass(String pass) {
         this.pass = pass;
@@ -60,9 +53,6 @@ public class ExcelController {
         return webdriver;
     }
 
-    public void setWebdriver(WebDriver webdriver) {
-        this.webdriver = webdriver;
-    }
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public void openTestRailRunsWithLogin() {
@@ -77,9 +67,6 @@ public class ExcelController {
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public void updateCtfr(String filePath) {
-
-        Map<String, TestRailCase> previousRegression = ExcelUtils.convertExcel2Hashmap(new File(filePath));
-
         String environment = "CTFR";
         String mounth = DateTimeFormatter.ofPattern("MM").format(LocalDateTime.now());
         String year = DateTimeFormatter.ofPattern("yyyy").format(LocalDateTime.now());
@@ -97,6 +84,7 @@ public class ExcelController {
         testRailPlansPage.openLastAutoRegression();
         List<TestRailCase> actualRegressionPostponed = testRailPlansPage.loadTestCases(POSTPONED);
 
+        Map<String, TestRailCase> previousRegression = ExcelUtils.convertExcel2Hashmap(new File(filePath));
         List<TestRailCase> postponedCases = ExcelUtils.mergePostponedCases(previousRegression,
                 actualRegressionPostponed);
 
@@ -108,9 +96,6 @@ public class ExcelController {
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public void updateInt1fr(String filePath) {
-
-        Map<String, TestRailCase> previousRegression = ExcelUtils.convertExcel2Hashmap(new File(filePath));
-
         String environment = "INT1FR";
         String mounth = DateTimeFormatter.ofPattern("MM").format(LocalDateTime.now());
         String year = DateTimeFormatter.ofPattern("yyyy").format(LocalDateTime.now());
@@ -128,6 +113,7 @@ public class ExcelController {
         testRailPlansPage.openLastAutoRegression();
         List<TestRailCase> actualRegressionPostponed = testRailPlansPage.loadTestCases(POSTPONED);
 
+        Map<String, TestRailCase> previousRegression = ExcelUtils.convertExcel2Hashmap(new File(filePath));
         List<TestRailCase> postponedCases = ExcelUtils.mergePostponedCases(previousRegression,
                 actualRegressionPostponed);
 
@@ -139,9 +125,6 @@ public class ExcelController {
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public void updateCustom(String filePath, String regressionName, String resultsName) {
-
-        Map<String, TestRailCase> previousRegression = ExcelUtils.convertExcel2Hashmap(new File(filePath));
-
         testRailRunsPage.navigateAutoRegression(regressionName);
 
         testRailPlansPage.openCustomAutoRegression(resultsName);
@@ -152,6 +135,7 @@ public class ExcelController {
         testRailPlansPage.openCustomAutoRegression(resultsName);
         List<TestRailCase> actualRegressionPostponed = testRailPlansPage.loadTestCases(POSTPONED);
 
+        Map<String, TestRailCase> previousRegression = ExcelUtils.convertExcel2Hashmap(new File(filePath));
         List<TestRailCase> postponedCases = ExcelUtils.mergePostponedCases(previousRegression,
                 actualRegressionPostponed);
 

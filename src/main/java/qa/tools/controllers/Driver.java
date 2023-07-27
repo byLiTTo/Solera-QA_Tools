@@ -20,8 +20,8 @@ public class Driver {
     public static WebDriver configureWebDriver() {
         ChromeOptions co = new ChromeOptions()
                 .addArguments("--remote-allow-origins=*")
-//                .addArguments("--headless")
-//                .addArguments("--disable-gpu")
+                .addArguments("--headless")
+                .addArguments("--disable-gpu")
                 .addArguments("--window-size=1920,1080");
         co.setBrowserVersion("114");
         WebDriverManager.chromedriver().setup();

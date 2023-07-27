@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -35,6 +37,8 @@ import qa.tools.constants.ExcelConstants.ExcelFields;
 import qa.tools.models.TestRailCase;
 
 public class ExcelUtils {
+
+    private static final Logger logger = Logger.getLogger(ExcelUtils.class.getName());
 
     private ExcelUtils() {
         throw new IllegalStateException("ExcelUtils class");
@@ -62,35 +66,23 @@ public class ExcelUtils {
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public static Map<String, TestRailCase> convertExcel2Hashmap(File file) {
-        HashMap<String, TestRailCase> testRailCaseHashMap = new HashMap<>();
+        Map<String, TestRailCase> map = new HashMap<>();
 
-        try (FileInputStream fileInputStream = new FileInputStream(file);
-                XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream)) {
-
+        try (FileInputStream inputStream = new FileInputStream(file); XSSFWorkbook workbook = new XSSFWorkbook(
+                inputStream)) {
             XSSFSheet sheet = workbook.getSheetAt(0);
-            int rowNum = sheet.getLastRowNum();
-            if (rowNum == 0) {
-                return testRailCaseHashMap;
-            }
-            int regressionRow = rowNum;
-            for (int i = regressionRow; i >= 0; i--) {
-                if (sheet.getRow(i) != null && sheet.getRow(i).getCell(0) != null && sheet.getRow(regressionRow)
-                        .getCell(0)
-                        .getStringCellValue()
-                        .equals(ExcelFields.ASSIGNED_TO.toString())) {
-                    regressionRow = i;
-                    break;
 
-                }
-            }
-
+            int regressionRow = findPreviousRegressionRow(sheet);
             Iterator<Row> rowIterator = sheet.getRow(regressionRow).getSheet().rowIterator();
+
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 Iterator<Cell> cellIterator = row.cellIterator();
 
-                String assignedTo = cellIterator.next().getStringCellValue();
-                String failRatio = cellIterator.next().getStringCellValue();
+                final String assignedTo = cellIterator.next().getStringCellValue();
+
+                final String failRatio = cellIterator.next().getStringCellValue();
+
                 Cell aux = cellIterator.next();
                 String titleHyperlinkAddress;
                 String titleHyperlinkLabel;
@@ -100,6 +92,7 @@ public class ExcelUtils {
                     titleHyperlinkAddress = aux.getHyperlink().getAddress();
                 }
                 titleHyperlinkLabel = aux.getStringCellValue();
+
                 aux = cellIterator.next();
                 String caseHyperlinkAddress;
                 String caseHyperlinkLabel;
@@ -109,10 +102,15 @@ public class ExcelUtils {
                     caseHyperlinkAddress = aux.getHyperlink().getAddress();
                 }
                 caseHyperlinkLabel = aux.getStringCellValue();
-                String tesStatus = cellIterator.next().getStringCellValue();
-                String section = cellIterator.next().getStringCellValue();
-                String description = cellIterator.next().getStringCellValue();
-                String solution = cellIterator.next().getStringCellValue();
+
+                final String tesStatus = cellIterator.next().getStringCellValue();
+
+                final String section = cellIterator.next().getStringCellValue();
+
+                final String description = cellIterator.next().getStringCellValue();
+
+                final String solution = cellIterator.next().getStringCellValue();
+
                 aux = cellIterator.next();
                 String solHyperlinkAddress;
                 String solHyperlinkLabel;
@@ -124,31 +122,27 @@ public class ExcelUtils {
                     solHyperlinkAddress = aux.getHyperlink().getAddress();
                 }
                 solHyperlinkLabel = aux.getStringCellValue();
-                String status = cellIterator.next().getStringCellValue();
+
+                final String status = cellIterator.next().getStringCellValue();
 
                 TestRailCase temp = new TestRailCase(
                         assignedTo,
                         failRatio,
-                        titleHyperlinkAddress,
-                        titleHyperlinkLabel,
-                        caseHyperlinkAddress,
-                        caseHyperlinkLabel,
+                        new String[]{titleHyperlinkAddress, titleHyperlinkLabel},
+                        new String[]{caseHyperlinkAddress, caseHyperlinkLabel},
                         tesStatus,
                         section,
                         description,
                         solution,
-                        solHyperlinkAddress,
-                        solHyperlinkLabel,
+                        new String[]{solHyperlinkAddress, solHyperlinkLabel},
                         status
                 );
-                testRailCaseHashMap.put(caseHyperlinkLabel, temp);
+                map.put(caseHyperlinkLabel, temp);
             }
-
-            return testRailCaseHashMap;
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.log(Level.WARNING, "IOException: ", e);
         }
+        return map;
     }
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
@@ -191,7 +185,6 @@ public class ExcelUtils {
             int rowValidation = rownNum;
             int color = 0;
             for (int i = 0; i < cases.size(); i++) {
-                TestRailCase testRailCase = cases.get(i);
                 color = setSectionColor(i, color, cases);
                 CellStyle style = getStyle(color, sheet.getWorkbook().createCellStyle());
 
@@ -199,6 +192,7 @@ public class ExcelUtils {
                 int cellnumTemp = 0;
                 cell = rowTemp.createCell(cellnumTemp++);
                 cell.setCellStyle(style);
+                TestRailCase testRailCase = cases.get(i);
                 cell.setCellValue(testRailCase.getAssigned());
 
                 cell = rowTemp.createCell(cellnumTemp++);
@@ -251,7 +245,8 @@ public class ExcelUtils {
             CellRangeAddressList addressList = new CellRangeAddressList(rowValidation, rowValidation + cases.size() - 1,
                     9,
                     9);
-            DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(ExcelConstants.STATUS);
+            DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(
+                    ExcelConstants.getStatus());
             DataValidation dataValidation = validationHelper.createValidation(constraint, addressList);
             dataValidation.setSuppressDropDownArrow(true);
             sheet.addValidationData(dataValidation);
@@ -261,7 +256,7 @@ public class ExcelUtils {
 
             outputStream.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.log(Level.WARNING, "IOException: ", e);
         }
 
     }
@@ -288,7 +283,7 @@ public class ExcelUtils {
         style.setBorderLeft(CellStyle.BORDER_THIN);
         style.setBorderRight(CellStyle.BORDER_THIN);
         style.setWrapText(true);
-        style.setFillForegroundColor(ExcelConstants.COLORS[color].getIndex());
+        style.setFillForegroundColor(ExcelConstants.getColors()[color].getIndex());
 
         return style;
     }
@@ -301,13 +296,30 @@ public class ExcelUtils {
             if (cases.get(i - 1).getSection().equals(cases.get(i).getSection())) {
                 return color;
             } else {
-                if (color == ExcelConstants.COLORS.length - 1) {
+                if (color == ExcelConstants.getColors().length - 1) {
                     return 0;
                 } else {
                     return ++color;
                 }
             }
         }
+    }
+
+    private static int findPreviousRegressionRow(XSSFSheet sheet) {
+        int rowNum = sheet.getLastRowNum();
+        if (rowNum == 0) {
+            return 0;
+        } else {
+            for (int i = rowNum; i >= 0; i--) {
+                if (sheet.getRow(i) != null && sheet.getRow(i).getCell(0) != null && sheet.getRow(i)
+                        .getCell(0)
+                        .getStringCellValue()
+                        .equals(ExcelFields.ASSIGNED_TO.toString())) {
+                    return i;
+                }
+            }
+        }
+        return rowNum;
     }
 
 }
