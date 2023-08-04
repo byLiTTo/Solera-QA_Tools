@@ -6,6 +6,12 @@
 package qa.tools.utils;
 
 import static org.apache.poi.common.usermodel.Hyperlink.LINK_URL;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_ERROR;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +50,6 @@ public class ExcelUtils {
         throw new IllegalStateException("ExcelUtils class");
     }
 
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public static List<TestRailCase> mergePostponedCases(Map<String, TestRailCase> previous,
             List<TestRailCase> actual) {
         List<TestRailCase> temp = new ArrayList<>();
@@ -62,87 +67,6 @@ public class ExcelUtils {
             temp.add(test);
         }
         return temp;
-    }
-
-    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public static Map<String, TestRailCase> convertExcel2Hashmap(File file) {
-        Map<String, TestRailCase> map = new HashMap<>();
-
-        try (FileInputStream inputStream = new FileInputStream(file); XSSFWorkbook workbook = new XSSFWorkbook(
-                inputStream)) {
-            XSSFSheet sheet = workbook.getSheetAt(0);
-
-            int regressionRow = findPreviousRegressionRow(sheet);
-            Iterator<Row> rowIterator = sheet.getRow(regressionRow).getSheet().rowIterator();
-
-            while (rowIterator.hasNext()) {
-                Row row = rowIterator.next();
-                Iterator<Cell> cellIterator = row.cellIterator();
-
-                final String assignedTo = cellIterator.next().getStringCellValue();
-
-                final String failRatio = cellIterator.next().getStringCellValue();
-
-                Cell aux = cellIterator.next();
-                String titleHyperlinkAddress;
-                String titleHyperlinkLabel;
-                if (aux.getHyperlink() == null) {
-                    titleHyperlinkAddress = "";
-                } else {
-                    titleHyperlinkAddress = aux.getHyperlink().getAddress();
-                }
-                titleHyperlinkLabel = aux.getStringCellValue();
-
-                aux = cellIterator.next();
-                String caseHyperlinkAddress;
-                String caseHyperlinkLabel;
-                if (aux.getHyperlink() == null) {
-                    caseHyperlinkAddress = "";
-                } else {
-                    caseHyperlinkAddress = aux.getHyperlink().getAddress();
-                }
-                caseHyperlinkLabel = aux.getStringCellValue();
-
-                final String tesStatus = cellIterator.next().getStringCellValue();
-
-                final String section = cellIterator.next().getStringCellValue();
-
-                final String description = cellIterator.next().getStringCellValue();
-
-                final String solution = cellIterator.next().getStringCellValue();
-
-                aux = cellIterator.next();
-                String solHyperlinkAddress;
-                String solHyperlinkLabel;
-                if (aux.getHyperlink() == null) {
-                    solHyperlinkAddress = "";
-                } else if (aux.getHyperlink().getAddress() == null) {
-                    solHyperlinkAddress = "";
-                } else {
-                    solHyperlinkAddress = aux.getHyperlink().getAddress();
-                }
-                solHyperlinkLabel = aux.getStringCellValue();
-
-                final String status = cellIterator.next().getStringCellValue();
-
-                TestRailCase temp = new TestRailCase(
-                        assignedTo,
-                        failRatio,
-                        new String[]{titleHyperlinkAddress, titleHyperlinkLabel},
-                        new String[]{caseHyperlinkAddress, caseHyperlinkLabel},
-                        tesStatus,
-                        section,
-                        description,
-                        solution,
-                        new String[]{solHyperlinkAddress, solHyperlinkLabel},
-                        status
-                );
-                map.put(caseHyperlinkLabel, temp);
-            }
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException: ", e);
-        }
-        return map;
     }
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
@@ -305,21 +229,127 @@ public class ExcelUtils {
         }
     }
 
-    private static int findPreviousRegressionRow(XSSFSheet sheet) {
+    private static Iterator<Row> findPreviousRegressionRow(XSSFSheet sheet) {
         int rowNum = sheet.getLastRowNum();
         if (rowNum == 0) {
-            return 0;
+            return sheet.rowIterator();
         } else {
             for (int i = rowNum; i >= 0; i--) {
                 if (sheet.getRow(i) != null && sheet.getRow(i).getCell(0) != null && sheet.getRow(i)
                         .getCell(0)
                         .getStringCellValue()
                         .equals(ExcelFields.ASSIGNED_TO.toString())) {
-                    return i;
+                    Iterator<Row> aux = sheet.rowIterator();
+                    for (int j = 0; j <= i; j++) {
+                        aux.next();
+                    }
+                    return aux;
                 }
             }
         }
-        return rowNum;
+        Iterator<Row> aux = sheet.rowIterator();
+        for (int j = 0; j <= rowNum; j++) {
+            aux.next();
+        }
+        return aux;
+    }
+
+    //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+    public static Map<String, TestRailCase> convertExcel2Hashmap(File file) {
+        Map<String, TestRailCase> map = new HashMap<>();
+
+        try (FileInputStream inputStream = new FileInputStream(file); XSSFWorkbook workbook = new XSSFWorkbook(
+                inputStream)) {
+            XSSFSheet sheet = workbook.getSheetAt(0);
+
+            Iterator<Row> rowIterator = findPreviousRegressionRow(sheet);
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                Iterator<Cell> cellIterator = row.cellIterator();
+
+                final String assignedTo = getCellValue(cellIterator.next());
+
+                final String failRatio = getCellValue(cellIterator.next());
+
+                Cell aux = cellIterator.next();
+                String titleHyperlinkAddress;
+                String titleHyperlinkLabel;
+                if (aux.getHyperlink() == null) {
+                    titleHyperlinkAddress = "";
+                } else {
+                    titleHyperlinkAddress = aux.getHyperlink().getAddress();
+                }
+                titleHyperlinkLabel = aux.getStringCellValue();
+
+                aux = cellIterator.next();
+                String caseHyperlinkAddress;
+                String caseHyperlinkLabel;
+                if (aux.getHyperlink() == null) {
+                    caseHyperlinkAddress = "";
+                } else {
+                    caseHyperlinkAddress = aux.getHyperlink().getAddress();
+                }
+                caseHyperlinkLabel = aux.getStringCellValue();
+
+                final String tesStatus = getCellValue(cellIterator.next());
+
+                final String section = getCellValue(cellIterator.next());
+
+                final String description = getCellValue(cellIterator.next());
+
+                final String solution = getCellValue(cellIterator.next());
+
+                aux = cellIterator.next();
+                String solHyperlinkAddress;
+                String solHyperlinkLabel;
+                if (aux.getHyperlink() == null) {
+                    solHyperlinkAddress = "";
+                } else if (aux.getHyperlink().getAddress() == null) {
+                    solHyperlinkAddress = "";
+                } else {
+                    solHyperlinkAddress = aux.getHyperlink().getAddress();
+                }
+                solHyperlinkLabel = aux.getStringCellValue();
+
+                final String status = getCellValue(cellIterator.next());
+
+                TestRailCase temp = new TestRailCase(
+                        assignedTo,
+                        failRatio,
+                        new String[]{titleHyperlinkAddress, titleHyperlinkLabel},
+                        new String[]{caseHyperlinkAddress, caseHyperlinkLabel},
+                        tesStatus,
+                        section,
+                        description,
+                        solution,
+                        new String[]{solHyperlinkAddress, solHyperlinkLabel},
+                        status
+                );
+                map.put(caseHyperlinkLabel, temp);
+            }
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "IOException: ", e);
+        }
+        return map;
+    }
+
+    private static String getCellValue(Cell cell) {
+        switch (cell.getCellType()) {
+            case CELL_TYPE_BLANK:
+                return "";
+            case CELL_TYPE_BOOLEAN:
+                return Boolean.toString(cell.getBooleanCellValue());
+            case CELL_TYPE_ERROR:
+                return Byte.toString(cell.getErrorCellValue());
+            case CELL_TYPE_FORMULA:
+                return cell.getCellFormula();
+            case CELL_TYPE_NUMERIC:
+                return Double.toString(cell.getNumericCellValue());
+            default:
+            case CELL_TYPE_STRING:
+                return cell.getStringCellValue();
+        }
     }
 
 }
