@@ -16,6 +16,7 @@ public class ResourcesConstants {
     public static final String CTFR_REGRESSION_ICON = "src/main/resources/icons/ctfr_icon_80px.png";
     public static final String INT1FR_REGRESSION_ICON = "src/main/resources/icons/int1fr_icon_80px.png";
     public static final String CUSTOM_REGRESSION_ICON = "src/main/resources/icons/custom_icon_80px.png";
+    public static final String TEST_PLAN_ICON = "src/main/resources/icons/test_plan_icon_80.png";
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     // BACKGROUNDS
     public static final String LOGIN_BACKGROUND = "src/main/resources/backgrounds/background-white-logo (Small).jpg";

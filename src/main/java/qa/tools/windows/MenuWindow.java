@@ -26,6 +26,7 @@ import javax.swing.WindowConstants;
 import qa.tools.constants.ResourcesConstants;
 import qa.tools.constants.TestRailConstants;
 import qa.tools.controllers.ExcelController;
+import qa.tools.controllers.TestPlanController;
 import qa.tools.models.JRoundedButton;
 import qa.tools.models.JRoundedPanel;
 import qa.tools.utils.PomReader;
@@ -42,6 +43,11 @@ public class MenuWindow extends JFrame {
 
     private JLabel versionTextField;
     private JLayeredPane layeredPane;
+    private JPanel testResultRegion;
+    private JPanel testRunRegion;
+    private JPanel testPlanNameRegion;
+    private JRoundedButton runCustomButton;
+    private JRoundedButton runTestPlanButton;
 
     public MenuWindow(String userName, String pass) {
 
@@ -152,6 +158,31 @@ public class MenuWindow extends JFrame {
         customRegressionRegion.add(customTitle);
         customRegressionRegion.add(customSection);
 
+        // Regression to test run --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+        JLabel testPlanIcon = new JLabel();
+        testPlanIcon.setIcon(new ImageIcon(ResourcesConstants.TEST_PLAN_ICON));
+
+        JRoundedPanel testPlanPanel = new JRoundedPanel();
+        testPlanPanel.setOpaque(false);
+        testPlanPanel.setBackground(Color.blue);
+        testPlanPanel.add(testPlanIcon, BorderLayout.CENTER);
+        testPlanPanel.setBounds(10, 10, 100, 100);
+
+        JLabel testPlanTitle = new JLabel(AUTO_REGRESSION);
+        testPlanTitle.setBounds(13, 115, 95, 14);
+
+        JLabel testPlanSection = new JLabel("to Test Plan");
+        testPlanSection.setBounds(25, 130, 95, 14);
+
+        JPanel testPlanRegion = new JPanel();
+        testPlanRegion.setLayout(null);
+        testPlanRegion.setOpaque(false);
+        testPlanRegion.setBackground(Color.blue);
+        testPlanRegion.setBounds(15, 180, 120, 150);
+        testPlanRegion.add(testPlanTitle);
+        testPlanRegion.add(testPlanSection);
+        testPlanRegion.add(testPlanPanel);
+
         // Menu region   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         JPanel menuRegion = new JPanel();
         menuRegion.setLayout(null);
@@ -162,6 +193,7 @@ public class MenuWindow extends JFrame {
         menuRegion.add(ctfrRegressionRegion);
         menuRegion.add(intfrRegressionRegion);
         menuRegion.add(customRegressionRegion);
+        menuRegion.add(testPlanRegion);
 
         // Version region    --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         versionTextField = new JLabel(PomReader.readSnapshotVersion());
@@ -169,7 +201,7 @@ public class MenuWindow extends JFrame {
 
         // Test Run Region   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         JLabel testRunLabel = new JLabel("Test Runs name:");
-        testRunLabel.setBounds(15, 200, 400, 24);
+        testRunLabel.setBounds(160, 185, 400, 24);
 
         String name = String.format(
                 TestRailConstants.AUTOREGRESSION_NAME_FORMAT,
@@ -187,10 +219,10 @@ public class MenuWindow extends JFrame {
         testRunPanel.setLayout(null);
         testRunPanel.setOpaque(false);
         testRunPanel.setBackground(Color.red);
-        testRunPanel.setBounds(10, 220, 400, 24);
+        testRunPanel.setBounds(150, 205, 400, 24);
         testRunPanel.add(testRunTextField);
 
-        JPanel testRunRegion = new JPanel();
+        testRunRegion = new JPanel();
         testRunRegion.setLayout(null);
         testRunRegion.setOpaque(false);
         testRunRegion.setBackground(Color.red);
@@ -201,7 +233,7 @@ public class MenuWindow extends JFrame {
 
         // Test Results Region   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         JLabel testResultLabel = new JLabel("Test Results name:");
-        testResultLabel.setBounds(15, 200, 400, 24);
+        testResultLabel.setBounds(160, 170, 400, 24);
 
         JTextField testResultTextField = new JTextField("11:43 24/07 QapterClaims FR");
         testResultTextField.setBounds(10, 0, 400, 24);
@@ -212,10 +244,10 @@ public class MenuWindow extends JFrame {
         testResultPanel.setLayout(null);
         testResultPanel.setOpaque(false);
         testResultPanel.setBackground(Color.red);
-        testResultPanel.setBounds(10, 220, 400, 24);
+        testResultPanel.setBounds(150, 190, 400, 24);
         testResultPanel.add(testResultTextField);
 
-        JPanel testResultRegion = new JPanel();
+        testResultRegion = new JPanel();
         testResultRegion.setLayout(null);
         testResultRegion.setOpaque(false);
         testResultRegion.setBackground(Color.red);
@@ -224,12 +256,44 @@ public class MenuWindow extends JFrame {
         testResultRegion.add(testResultPanel);
         testResultRegion.setVisible(false);
 
+        // Test Plan Region  --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+        JLabel testPlanNameLabel = new JLabel("Test Plan name:");
+        testPlanNameLabel.setBounds(160, 185, 400, 24);
+
+        JTextField testPlanNameField = new JTextField("FR_QAPTER_CLAIMS_SCRIPT_TEST");
+        testPlanNameField.setBounds(10, 0, 400, 24);
+        testPlanNameField.setBorder(null);
+        testPlanNameField.setOpaque(false);
+
+        JRoundedPanel testPlanNamePanel = new JRoundedPanel();
+        testPlanNamePanel.setLayout(null);
+        testPlanNamePanel.setOpaque(false);
+        testPlanNamePanel.setBackground(Color.red);
+        testPlanNamePanel.setBounds(150, 205, 400, 24);
+        testPlanNamePanel.add(testPlanNameField);
+
+        testPlanNameRegion = new JPanel();
+        testPlanNameRegion.setLayout(null);
+        testPlanNameRegion.setOpaque(false);
+        testPlanNameRegion.setBackground(Color.red);
+        testPlanNameRegion.setBounds(130, 150, 600, 350);
+        testPlanNameRegion.add(testPlanNameLabel);
+        testPlanNameRegion.add(testPlanNamePanel);
+        testPlanNameRegion.setVisible(false);
+
         // Custom Auto Regression Button --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-        JRoundedButton runCustomButton = new JRoundedButton("Run");
-        runCustomButton.setBounds(140, 380, 100, 24);
+        runCustomButton = new JRoundedButton("Run");
         runCustomButton.setBorder(null);
         runCustomButton.setOpaque(false);
+        runCustomButton.setBounds(285, 345, 100, 24);
         runCustomButton.setVisible(false);
+
+        // Auto regression to test plan Button   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+        runTestPlanButton = new JRoundedButton("Run");
+        runTestPlanButton.setBorder(null);
+        runTestPlanButton.setOpaque(false);
+        runTestPlanButton.setBounds(285, 390, 100, 24);
+        runTestPlanButton.setVisible(false);
 
         // Layered panel --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         layeredPane = new JLayeredPane();
@@ -238,7 +302,9 @@ public class MenuWindow extends JFrame {
         layeredPane.add(menuRegion, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(testRunRegion, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(testResultRegion, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(testPlanNameRegion, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(runCustomButton, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(runTestPlanButton, JLayeredPane.PALETTE_LAYER);
 
         // Adding content to JFrame  --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         setContentPane(layeredPane);
@@ -263,6 +329,9 @@ public class MenuWindow extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                customRunVisible(false);
+                testPlanVisible(false);
+
                 final JFileChooser fileChooserCT = new JFileChooser();
                 fileChooserCT.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooserCT.showOpenDialog(layeredPane);
@@ -309,6 +378,9 @@ public class MenuWindow extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                customRunVisible(false);
+                testPlanVisible(false);
+
                 final JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooser.showOpenDialog(layeredPane);
@@ -345,6 +417,9 @@ public class MenuWindow extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                customRunVisible(false);
+                testPlanVisible(false);
+
                 final JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooser.showOpenDialog(layeredPane);
@@ -381,9 +456,8 @@ public class MenuWindow extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                testResultRegion.setVisible(true);
-                testRunRegion.setVisible(true);
-                runCustomButton.setVisible(true);
+                testPlanVisible(false);
+                customRunVisible(true);
             }
         });
 
@@ -400,9 +474,8 @@ public class MenuWindow extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                testResultRegion.setVisible(false);
-                testRunRegion.setVisible(false);
-                runCustomButton.setVisible(false);
+                customRunVisible(false);
+                testPlanVisible(false);
 
                 final JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -430,9 +503,74 @@ public class MenuWindow extends JFrame {
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
         });
+
+        testPlanPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                customRunVisible(false);
+                testPlanVisible(true);
+            }
+        });
+
+        runTestPlanButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                customRunVisible(false);
+                testPlanVisible(false);
+
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+                TestPlanController controller = new TestPlanController();
+
+                controller.setUserName(userName);
+                controller.setPass(pass);
+
+                controller.openTestRailRunsWithLogin();
+                controller.updateTestPlan(
+                        testRunTextField.getText(),
+                        testResultTextField.getText(),
+                        testPlanNameField.getText()
+                );
+
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
     }
 
     public static void runApplication() {
         new MenuWindow("", "");
+    }
+
+    private void customRunVisible(boolean value) {
+        testResultRegion.setVisible(value);
+        testRunRegion.setVisible(value);
+        runCustomButton.setVisible(value);
+    }
+
+    private void testPlanVisible(boolean value) {
+        testResultRegion.setVisible(value);
+        testRunRegion.setVisible(value);
+        testPlanNameRegion.setVisible(value);
+        runTestPlanButton.setVisible(value);
     }
 }

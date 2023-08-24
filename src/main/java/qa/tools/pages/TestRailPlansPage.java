@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,11 +25,13 @@ public class TestRailPlansPage {
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     private static final String LAST_AUTO_REGRESSION_XPATH =
-            "//div[@class='detailsContainer'][last()]" + "//a[contains(text(),'QapterClaims FR')]";
+            "//div[@class='detailsContainer'][last()]//a[contains(text(),'QapterClaims FR')]";
     private static final String CUSTOM_AUTO_REGRESSION_XPATH_FORMAT =
-            "//div[@class='detailsContainer']" + "//a[contains(text(),'%s')]";
+            "//div[@class='detailsContainer']//a[contains(text(),'%s')]";
     private static final String GRID_CHART_ID = "grid-chart-14959939";
-    private static final String TESTCASES_TYPE_XPATH_FORMAT = "//td[@class='js-status']//a[text()='%s']/../..";
+    private static final String TESTCASES_TYPE_XPATH_FORMAT = "//td/a[contains(text(),'%s')]/../..";
+    private static final String TESTCASES_STATUS_BUTTON_XPATH_FORMAT =
+            TESTCASES_TYPE_XPATH_FORMAT + "//a[@class='dropdownLink status hidden-xs']";
     private static final String TABLE_TITLES_XPATH = "//*[@id=\"grid-14959939\"]/tbody/tr//a";
     private static final String DISPLAYER = "./td[@class='action']";
     private static final String HISTORY_TAB = "//div[@class='tab-header']/a[@id= 'historyTab']";
@@ -37,6 +40,9 @@ public class TestRailPlansPage {
     private static final String HISTORY_RECENTLY = "//div[@id='history']";
     private static final String HISTORY_RECENTLY_TEST_XPATH_FORMAT =
             HISTORY_RECENTLY + "//div[@class='chart-legend-name text-ppp' and contains(text(),'%s')]";
+    private static final String ADD_RESULT_POP_UP_ID = "addResultDialog";
+    private static final String ADD_RESULT_BUTTON_ID = "addResultSubmit";
+    private static final String CANCEL_RESULT_BUTTON_ID = "addResultClose";
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
 
@@ -112,6 +118,11 @@ public class TestRailPlansPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(GRID_CHART_ID)));
     }
 
+    public void openTestPlan() {
+        webDriver.findElement(By.xpath(String.format(CUSTOM_AUTO_REGRESSION_XPATH_FORMAT, "QapterClaims FR"))).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(GRID_CHART_ID)));
+    }
+
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public List<TestRailCase> loadTestCases(String type) {
         sleep(1000);
@@ -160,5 +171,62 @@ public class TestRailPlansPage {
             ));
         }
         return temp;
+    }
+
+    public List<String> loadTestCasesID(String type) {
+        sleep(1000);
+
+        int checkAndStart = 2;
+        int caseIDIndex = 0;
+
+        List<WebElement> titlesTable = webDriver.findElements(By.xpath(TABLE_TITLES_XPATH));
+        for (int i = 0; i < titlesTable.size(); i++) {
+            if (titlesTable.get(i).getAttribute("title").equals("Case ID")) {
+                caseIDIndex = i + checkAndStart;
+            }
+        }
+
+        List<WebElement> testCasesElement = webDriver.findElements(
+                By.xpath(String.format(TESTCASES_TYPE_XPATH_FORMAT, type))
+        );
+
+        List<String> temp = new ArrayList<>();
+        for (WebElement element : testCasesElement) {
+            temp.add(element.findElement(By.xpath("./td[" + caseIDIndex + "]/a")).getText());
+        }
+        return temp;
+    }
+
+    public void updatePassedTestCases(List<String> cases) {
+        for (String title : cases) {
+            try {
+                WebElement testCase = webDriver.findElement(
+                        By.xpath(String.format(TESTCASES_STATUS_BUTTON_XPATH_FORMAT, title)));
+
+                System.out.println(title);
+
+                JavascriptExecutor js = (JavascriptExecutor) webDriver;
+
+                js.executeScript(SCROLL_SCRIPT, testCase);
+                sleep(500);
+
+                wait.until(ExpectedConditions.visibilityOf(testCase));
+                wait.until(ExpectedConditions.elementToBeClickable(testCase)).click();
+
+                wait.until(ExpectedConditions.visibilityOf(
+                        testCase.findElement(By.xpath("//a[@class='dropdown-menu-link' and text()='Passed']"))));
+                wait.until(ExpectedConditions.elementToBeClickable(
+                                testCase.findElement(By.xpath("//a[@class='dropdown-menu-link' and text()='Passed']"))))
+                        .click();
+
+                wait.until(ExpectedConditions.visibilityOf(webDriver.findElement(By.id(ADD_RESULT_BUTTON_ID))));
+                wait.until(ExpectedConditions.elementToBeClickable(webDriver.findElement(By.id(ADD_RESULT_BUTTON_ID))))
+                        .click();
+
+                wait.until(ExpectedConditions.invisibilityOf(webDriver.findElement(By.id(ADD_RESULT_POP_UP_ID))));
+            } catch (NoSuchElementException exception) {
+                System.out.println("null");
+            }
+        }
     }
 }
