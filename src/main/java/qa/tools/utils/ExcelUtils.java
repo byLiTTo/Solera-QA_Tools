@@ -239,19 +239,11 @@ public class ExcelUtils {
                         .getCell(0)
                         .getStringCellValue()
                         .equals(ExcelFields.ASSIGNED_TO.toString())) {
-                    Iterator<Row> aux = sheet.rowIterator();
-                    for (int j = 0; j <= i; j++) {
-                        aux.next();
-                    }
-                    return aux;
+                    return sheet.rowIterator();
                 }
             }
         }
-        Iterator<Row> aux = sheet.rowIterator();
-        for (int j = 0; j <= rowNum; j++) {
-            aux.next();
-        }
-        return aux;
+        return sheet.rowIterator();
     }
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->

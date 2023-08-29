@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import qa.tools.constants.TestRailConstants;
 import qa.tools.models.TestRailCase;
 import qa.tools.pages.TestRailPlansPage;
@@ -28,15 +28,15 @@ public class ExcelController {
 
     private String userName = "?";
     private String pass = "?";
-    private final WebDriver webdriver;
+    private final RemoteWebDriver webdriver;
     private final TestRailRunsPage testRailRunsPage;
     private final TestRailPlansPage testRailPlansPage;
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public ExcelController() {
         webdriver = Driver.configureWebDriver();
-        testRailRunsPage = new TestRailRunsPage(getWebdriver());
-        testRailPlansPage = new TestRailPlansPage(getWebdriver());
+        testRailRunsPage = new TestRailRunsPage(webdriver);
+        testRailPlansPage = new TestRailPlansPage(webdriver);
     }
 
 
@@ -49,7 +49,7 @@ public class ExcelController {
         this.pass = pass;
     }
 
-    public WebDriver getWebdriver() {
+    public RemoteWebDriver getWebdriver() {
         return webdriver;
     }
 

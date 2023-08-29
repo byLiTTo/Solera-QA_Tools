@@ -2,13 +2,14 @@ package qa.tools.controllers;
 
 import java.util.List;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import qa.tools.models.TestRailCase;
 import qa.tools.pages.TestRailPlansPage;
 import qa.tools.pages.TestRailRunsPage;
 
 public class TestPlanController {
 
-    private final WebDriver webdriver;
+    private final RemoteWebDriver webdriver;
     private final TestRailRunsPage testRailRunsPage;
     private final TestRailPlansPage testRailPlansPage;
     private String userName = "?";
@@ -17,8 +18,8 @@ public class TestPlanController {
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     public TestPlanController() {
         webdriver = Driver.configureWebDriver();
-        testRailRunsPage = new TestRailRunsPage(getWebdriver());
-        testRailPlansPage = new TestRailPlansPage(getWebdriver());
+        testRailRunsPage = new TestRailRunsPage(webdriver);
+        testRailPlansPage = new TestRailPlansPage(webdriver);
     }
 
     public void setUserName(String userName) {
@@ -30,7 +31,7 @@ public class TestPlanController {
         this.pass = pass;
     }
 
-    public WebDriver getWebdriver() {
+    public RemoteWebDriver getWebdriver() {
         return webdriver;
     }
 
