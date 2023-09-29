@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -295,6 +296,12 @@ public class MenuWindow extends JFrame {
         runTestPlanButton.setBounds(285, 390, 100, 24);
         runTestPlanButton.setVisible(false);
 
+        //
+        JRadioButton graphicalInterface = new JRadioButton("Graphical Interface");
+        graphicalInterface.setBounds(710, 5, 200, 24);
+        graphicalInterface.setVisible(true);
+        graphicalInterface.setOpaque(false);
+
         // Layered panel --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         layeredPane = new JLayeredPane();
         layeredPane.add(labelFondo, JLayeredPane.DEFAULT_LAYER);
@@ -305,6 +312,7 @@ public class MenuWindow extends JFrame {
         layeredPane.add(testPlanNameRegion, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(runCustomButton, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(runTestPlanButton, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(graphicalInterface, JLayeredPane.PALETTE_LAYER);
 
         // Adding content to JFrame  --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
         setContentPane(layeredPane);
@@ -348,7 +356,7 @@ public class MenuWindow extends JFrame {
 
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-                ExcelController controller = new ExcelController();
+                ExcelController controller = new ExcelController(graphicalInterface.isSelected());
 
                 controller.setUserName(userName);
                 controller.setPass(pass);
@@ -390,7 +398,7 @@ public class MenuWindow extends JFrame {
 
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-                ExcelController controller = new ExcelController();
+                ExcelController controller = new ExcelController(graphicalInterface.isSelected());
 
                 controller.setUserName(userName);
                 controller.setPass(pass);
@@ -429,7 +437,7 @@ public class MenuWindow extends JFrame {
 
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-                ExcelController controller = new ExcelController();
+                ExcelController controller = new ExcelController(graphicalInterface.isSelected());
 
                 controller.setUserName(userName);
                 controller.setPass(pass);
@@ -486,7 +494,7 @@ public class MenuWindow extends JFrame {
 
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-                ExcelController controller = new ExcelController();
+                ExcelController controller = new ExcelController(graphicalInterface.isSelected());
 
                 controller.setUserName(userName);
                 controller.setPass(pass);
@@ -539,8 +547,7 @@ public class MenuWindow extends JFrame {
                 testPlanVisible(false);
 
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-                TestPlanController controller = new TestPlanController();
+                TestPlanController controller = new TestPlanController(graphicalInterface.isSelected());
 
                 controller.setUserName(userName);
                 controller.setPass(pass);

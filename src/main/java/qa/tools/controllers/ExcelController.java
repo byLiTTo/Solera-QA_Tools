@@ -10,8 +10,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import qa.tools.constants.TestRailConstants;
 import qa.tools.models.TestRailCase;
@@ -33,8 +36,8 @@ public class ExcelController {
     private final TestRailPlansPage testRailPlansPage;
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public ExcelController() {
-        webdriver = Driver.configureWebDriver();
+    public ExcelController(boolean headless) {
+        webdriver = Driver.configureWebDriver(headless);
         testRailRunsPage = new TestRailRunsPage(webdriver);
         testRailPlansPage = new TestRailPlansPage(webdriver);
     }

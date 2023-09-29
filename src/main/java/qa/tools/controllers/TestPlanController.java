@@ -1,9 +1,7 @@
 package qa.tools.controllers;
 
 import java.util.List;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import qa.tools.models.TestRailCase;
 import qa.tools.pages.TestRailPlansPage;
 import qa.tools.pages.TestRailRunsPage;
 
@@ -16,8 +14,8 @@ public class TestPlanController {
     private String pass = "?";
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public TestPlanController() {
-        webdriver = Driver.configureWebDriver();
+    public TestPlanController(boolean headless) {
+        webdriver = Driver.configureWebDriver(headless);
         testRailRunsPage = new TestRailRunsPage(webdriver);
         testRailPlansPage = new TestRailPlansPage(webdriver);
     }
