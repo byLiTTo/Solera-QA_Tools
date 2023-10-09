@@ -160,10 +160,7 @@ public class TestRailPlansPage {
 
             String section = element.findElement(By.xpath("./../../..//*[@class='title pull-left']")).getText();
 
-            String failRatio = loadRecentlyHistory(element);
-
             temp.add(new TestRailCase(
-                    failRatio,
                     new String[]{titleHyperlinkAddress, titleHyperlinkLabel},
                     new String[]{caseHyperlinkAddress, caseHyperlinkLabel},
                     testStatus,

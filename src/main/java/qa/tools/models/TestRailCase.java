@@ -9,7 +9,6 @@ public class TestRailCase {
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     private String assigned;
-    private final String failRatio;
     private final String titleHyperlinkAddress;
     private final String titleHyperlinkLabel;
     private final String caseHyperlinkAddress;
@@ -23,10 +22,9 @@ public class TestRailCase {
     private String status;
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public TestRailCase(String failRatio, String[] titleHyperlink, String[] caseHyperlink, String testRailStatus,
+    public TestRailCase(String[] titleHyperlink, String[] caseHyperlink, String testRailStatus,
             String section) {
         this.assigned = "";
-        this.failRatio = failRatio;
         this.titleHyperlinkAddress = titleHyperlink[0];
         this.titleHyperlinkLabel = titleHyperlink[1];
         this.caseHyperlinkAddress = caseHyperlink[0];
@@ -40,11 +38,10 @@ public class TestRailCase {
     }
 
     //   --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-    public TestRailCase(String assigned, String failRatio, String[] titleHyperlink, String[] caseHyperlink,
+    public TestRailCase(String assigned, String[] titleHyperlink, String[] caseHyperlink,
             String testRailStatus, String section, String description, String solution, String[] solHyperlink,
             String status) {
         this.assigned = assigned;
-        this.failRatio = failRatio;
         this.titleHyperlinkAddress = titleHyperlink[0];
         this.titleHyperlinkLabel = titleHyperlink[1];
         this.caseHyperlinkAddress = caseHyperlink[0];
@@ -66,11 +63,7 @@ public class TestRailCase {
     public void setAssigned(String assigned) {
         this.assigned = assigned;
     }
-
-    public String getFailRatio() {
-        return failRatio;
-    }
-
+    
 
     public String getTitleHyperlinkAddress() {
         return titleHyperlinkAddress;

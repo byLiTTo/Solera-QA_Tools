@@ -121,10 +121,6 @@ public class ExcelUtils {
 
                 cell = rowTemp.createCell(cellnumTemp++);
                 cell.setCellStyle(style);
-                cell.setCellValue(testRailCase.getFailRatio());
-
-                cell = rowTemp.createCell(cellnumTemp++);
-                cell.setCellStyle(style);
                 XSSFHyperlink link = workBook.getCreationHelper().createHyperlink(LINK_URL);
                 link.setAddress(testRailCase.getTitleHyperlinkAddress());
                 cell.setHyperlink(link);
@@ -308,7 +304,6 @@ public class ExcelUtils {
 
                 TestRailCase temp = new TestRailCase(
                         assignedTo,
-                        failRatio,
                         new String[]{titleHyperlinkAddress, titleHyperlinkLabel},
                         new String[]{caseHyperlinkAddress, caseHyperlinkLabel},
                         tesStatus,
