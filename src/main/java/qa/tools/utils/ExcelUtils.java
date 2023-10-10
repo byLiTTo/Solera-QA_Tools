@@ -163,8 +163,8 @@ public class ExcelUtils {
 
             DataValidationHelper validationHelper = new XSSFDataValidationHelper(sheet);
             CellRangeAddressList addressList = new CellRangeAddressList(rowValidation, rowValidation + cases.size() - 1,
-                    9,
-                    9);
+                    ExcelConstants.ExcelFields.STATUS.ordinal(),
+                    ExcelConstants.ExcelFields.STATUS.ordinal());
             DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(
                     ExcelConstants.getStatus());
             DataValidation dataValidation = validationHelper.createValidation(constraint, addressList);
