@@ -258,8 +258,6 @@ public class ExcelUtils {
 
                 final String assignedTo = getCellValue(cellIterator.next());
 
-                final String failRatio = getCellValue(cellIterator.next());
-
                 Cell aux = cellIterator.next();
                 String titleHyperlinkAddress;
                 String titleHyperlinkLabel;

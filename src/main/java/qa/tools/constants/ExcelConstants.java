@@ -39,7 +39,6 @@ public class ExcelConstants {
 
     public enum ExcelFields {
         ASSIGNED_TO,
-        FAIL_PASS_POST,
         TITLE,
         CASE_ID,
         TEST_STATUS,
