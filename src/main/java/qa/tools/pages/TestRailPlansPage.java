@@ -30,6 +30,8 @@ public class TestRailPlansPage {
             "//div[@class='detailsContainer']//a[contains(text(),'%s')]";
     private static final String GRID_CHART_ID = "grid-chart-14959939";
     private static final String TESTCASES_TYPE_XPATH_FORMAT = "//td/a[contains(text(),'%s')]/../..";
+    private static final String TESTCASES_AUTOMATED_FAILED_XPATH = "//td/a[contains(text(),'Failed')]/../../td[@class='sub' and contains(text(),'Automated')]/..";
+    private static final String TESTCASES_MAINTENANCE_XPATH = "//td[@class='sub' and contains(text(),'Maintenance')]/..";
     private static final String TESTCASES_STATUS_BUTTON_XPATH_FORMAT =
             TESTCASES_TYPE_XPATH_FORMAT + "//a[@class='dropdownLink status hidden-xs']";
     private static final String TABLE_TITLES_XPATH = "//*[@id=\"grid-14959939\"]/tbody/tr//a";
@@ -140,10 +142,12 @@ public class TestRailPlansPage {
                 caseIDIndex = i + checkAndStart;
             }
         }
-
-        List<WebElement> testCasesElement = webDriver.findElements(
-                By.xpath(String.format(TESTCASES_TYPE_XPATH_FORMAT, type))
-        );
+        List<WebElement> testCasesElement;
+        if (type.equals("Failed")) {
+            testCasesElement = webDriver.findElements(By.xpath(TESTCASES_AUTOMATED_FAILED_XPATH));
+        } else {
+            testCasesElement = webDriver.findElements(By.xpath(TESTCASES_MAINTENANCE_XPATH));
+        }
 
         List<TestRailCase> temp = new ArrayList<>();
         for (WebElement element : testCasesElement) {
