@@ -10,15 +10,21 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 public class ExcelConstants {
     protected static final String[] STATUS = new String[]{
             "-",
-            "DEVELOPING",
-            "NODE_ERROR",
+            "ERROR_NODE",
+            "ERROR_SELENIUM",
+            "ERROR_PERFORMANCE",
+            "ERROR_NEED_INVESTIGATE",
+            "PR_DEVELOPING",
             "PR_CREATED",
             "PR_MERGED",
-            "POSSIBLE_BUG",
-            "REPORTED_BUG",
+            "BUG_CANDIDATE",
+            "BUG_REPORTED",
+            "BUG_OPEN",
+            "BUG_IN_PROGRESS",
+            "BUG_IN_TESTING",
+            "BUG_RESOLVED",
             "WAITING_SUPPORT",
             "WAITING_NEXT_EXECUTION",
-            "PERFORMANCE_ISSUE"
     };
     protected static final IndexedColors[] COLORS = {
             IndexedColors.LIGHT_GREEN,
